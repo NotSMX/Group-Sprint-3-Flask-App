@@ -21,7 +21,6 @@ def login():
         user = User.query.filter_by(email=email).first()
         if user and user.check_password(password):
             login_user(user)
-            flash(f"Welcome back, {user.name}!", "success")
             return redirect(url_for("main.home"))
         else:
             flash("Invalid email or password.", "error")
