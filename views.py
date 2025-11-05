@@ -14,3 +14,6 @@ def login():
 def register():
     return render_template('register.html')
 
+@main_blueprint.route('/submission')
+def submission():
+    return render_template('submission.html')
