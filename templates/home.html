@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home | CLAS</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="home-container">
+    <h1>Welcome to CLAS</h1>
+    <p>pick where you want to go.</p>
+    <div class="button-group">
+      <a class="btn" href="{{ url_for('main.schedule') }}">View Schedule</a>
+      
+      {% if current_user.role in ['admin', 'faculty'] %}
+        <a class="btn" href="#">Create Event (Coming Soon)</a>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>

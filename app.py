@@ -1,10 +1,23 @@
 from flask import Flask, render_template, send_from_directory, request
 from views import main_blueprint
-from flask_login import current_user, login_required
+from flask_login import current_user, login_required, LoginManager
 from models import db, User, Submission, Session, Room
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///clas_app.db'
+app.config["SECRET_KEY"] = "dev"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.register_blueprint(main_blueprint)
+
+db.init_app(app)
+
+login_manager = LoginManager()
+login_manager.login_view = 'main.login'
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 @app.route('/static/<path:filename>')
 def static_files(filename):
@@ -49,4 +62,7 @@ with app.app_context():
     db.create_all()
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()  # Create database tables
     app.run(debug=True)
+
