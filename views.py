@@ -1,4 +1,6 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request
+from flask_login import login_user, logout_user, login_required, current_user
+from models import db, User
 
 main_blueprint = Blueprint('main', __name__)
 
@@ -13,26 +15,54 @@ def home():
 @main_blueprint.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        flash("logged in", "success")
-        return redirect(url_for("main.home"))
-    return render_template("login.html")
+        email = (request.form.get("email") or "").strip()
+        password = request.form.get("password") or ""
 
-## still need authentication
+        user = User.query.filter_by(email=email).first()
+        if user and user.check_password(password):
+            login_user(user)
+            flash(f"Welcome back, {user.name}!", "success")
+            return redirect(url_for("main.home"))
+        else:
+            flash("Invalid email or password.", "error")
+            return render_template("login.html"), 401
+
+    return render_template("login.html")
 
 @main_blueprint.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        u = (request.form.get("username") or "").strip()
-        p = request.form.get("password") or ""
-        if not u or not p:
-            flash("you need to provide a username and password!!", "error")
+        user = (request.form.get("user") or "").strip()
+        email = (request.form.get("email") or "").strip()
+        password = request.form.get("password") or ""
+        role = (request.form.get("role") or "").strip()
+
+        if not user or not email or not password or not role:
+            flash("Please fill in all fields.", "error")
             return render_template("register.html"), 400
-        flash("Nice! Your account has been created", "success")
+
+        if User.query.filter_by(email=email).first():
+            flash("Email already registered!", "error")
+            return render_template("register.html"), 400
+
+        new_user = User(name=user, email=email, role=role)
+        new_user.set_password(password)
+        db.session.add(new_user)
+        db.session.commit()
+
+        flash("Account created successfully! You can now log in.", "success")
         return redirect(url_for("main.login"))
+
     return render_template("register.html")
 
-## need to add user to database
-
 @main_blueprint.get("/schedule")
+@login_required
 def schedule():
-    return render_template("schedule.html")
+    return render_template("schedule.html", user=current_user)
+
+@main_blueprint.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    flash("You’ve been logged out.", "info")
+    return redirect(url_for("main.login"))

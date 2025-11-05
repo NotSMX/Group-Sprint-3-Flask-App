@@ -37,7 +37,8 @@ h2 {
 
 /* ==== INPUTS ==== */
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+input[type="email"] {
   width: 100%;
   display: block;
   box-sizing: border-box; /* ensures padding doesn't shrink width */
@@ -165,4 +166,71 @@ button:active {
 .btn-outline:hover {
   background: rgba(255, 255, 255, 0.15);
   border-color: #e3f2fd;
+}
+
+/* ==== FLASH ==== */
+.flash-messages {
+  margin-bottom: 20px;
+}
+
+.alert {
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-bottom: 12px;  /* <— Adds spacing between stacked alerts */
+  font-weight: 500;
+}
+
+/* Optional colors based on category */
+.alert-success {
+  background-color: #d1e7dd;
+  color: #0f5132;
+  border: 1px solid #badbcc;
+}
+
+.alert-error {
+  background-color: #f8d7da;
+  color: #842029;
+  border: 1px solid #f5c2c7;
+}
+
+/* ==== DROPDOWN MENU ==== */
+select {
+  width: 100%;
+  display: block;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.25);
+  color: #f0f8ff;
+  font-size: 0.95em;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* Subtle blue highlight when hovering */
+select:hover {
+  background: rgba(255, 255, 255, 0.35);
+  border-color: #bbdefb;
+}
+
+/* Focused dropdown — glowy blue outline */
+select:focus {
+  border-color: #90caf9;
+  box-shadow: 0 0 8px rgba(144, 202, 249, 0.6);
+  outline: none;
+}
+
+/* Dropdown text color for options */
+option {
+  background-color: #0d47a1;
+  color: #e3f2fd;
+}
+option:hover {
+  background-color: #1565c0;
 }
