@@ -9,8 +9,9 @@ def landing():
     return render_template("base.html")
 
 @main_blueprint.route('/home')
+@login_required
 def home():
-    return render_template('home.html')
+    return render_template('home.html', user=current_user)
 
 @main_blueprint.route("/login", methods=["GET", "POST"])
 def login():
@@ -58,6 +59,45 @@ def register():
 @login_required
 def schedule():
     return render_template("schedule.html", user=current_user)
+
+# Profile
+@main_blueprint.get("/profile")
+@login_required
+def profile():
+    return render_template("profile.html", user=current_user)
+
+# Settings
+@main_blueprint.route("/settings", methods=["GET", "POST"])
+@login_required
+def settings():
+    if request.method == "POST":
+        name = (request.form.get("name") or "").strip()
+        role = (request.form.get("role") or "").strip()
+        photo = (request.form.get("profile_pic_url") or "").strip()
+        new_password = request.form.get("new_password") or ""
+        confirm_password = request.form.get("confirm_password") or ""
+
+        if name:
+            current_user.name = name
+        if role:
+            current_user.role = role
+        if photo:
+            current_user.profile_pic_url = photo
+
+        if new_password or confirm_password:
+            if new_password != confirm_password:
+                flash("Passwords do not match.", "error")
+                return render_template("settings.html", user=current_user), 400
+            if len(new_password) < 6:
+                flash("Password must be at least 6 characters.", "error")
+                return render_template("settings.html", user=current_user), 400
+            current_user.set_password(new_password)
+
+        db.session.commit()
+        flash("Settings updated.", "success")
+        return redirect(url_for("main.settings"))
+
+    return render_template("settings.html", user=current_user)
 
 @main_blueprint.route("/logout")
 @login_required

@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, flash, redirect, url_for, request
+from flask import Blueprint, request, render_template, flash, redirect, url_for
 from flask_login import login_required, current_user
 from models import db, Event, Session
 from datetime import time
@@ -56,7 +56,6 @@ def create_event():
         special_request=special_request,
         status=status
     )
-
     db.session.add(new_event)
     db.session.commit()
     if status == 'draft':

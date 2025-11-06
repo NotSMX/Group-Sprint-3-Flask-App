@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Settings | CLAS</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">CLAS</div>
+    <nav class="nav">
+      <a href="{{ url_for('main.home') }}">Home</a>
+      <a href="{{ url_for('main.schedule') }}">Schedule</a>
+      <a href="{{ url_for('events.eventcreate') }}">Create</a>
+      <a href="{{ url_for('events.eventlist') }}">My Events</a>
+      <a href="{{ url_for('main.profile') }}">Profile</a>
+      <a class="active" href="{{ url_for('main.settings') }}">Settings</a>
+      <a class="btn-small" href="{{ url_for('main.logout') }}">Logout</a>
+    </nav>
+  </header>
+
+  <main class="shell">
+    <h2 class="section-title">Settings</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="card form-card">
+      <form method="post" action="{{ url_for('main.settings') }}">
+        <label>Full Name</label>
+        <input type="text" name="name" value="{{ user.name }}" placeholder="Your name" />
+
+        <label>Role</label>
+        <select name="role">
+          <option value="student" {{ 'selected' if user.role=='student' else '' }}>Student</option>
+          <option value="faculty" {{ 'selected' if user.role=='faculty' else '' }}>Faculty</option>
+          <option value="admin" {{ 'selected' if user.role=='admin' else '' }}>Admin</option>
+        </select>
+
+        <label>Profile Photo URL</label>
+        <input type="text" name="profile_pic_url" value="{{ user.profile_pic_url or '' }}" placeholder="https://…" />
+
+        <div class="settings-split">
+          <div>
+            <label>New Password</label>
+            <input type="password" name="new_password" placeholder="New password" />
+          </div>
+          <div>
+            <label>Confirm Password</label>
+            <input type="password" name="confirm_password" placeholder="Confirm password" />
+          </div>
+        </div>
+
+        <button type="submit">Save Changes</button>
+      </form>
+    </div>
+  </main>
+</body>
+</html>
