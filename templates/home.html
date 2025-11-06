@@ -9,13 +9,17 @@
   <header class="topbar">
     <div class="brand">CLAS</div>
     <nav class="nav">
-      <a class="active" href="{{ url_for('main.home') }}">Home</a>
+      <a href="{{ url_for('main.home') }}">Home</a>
       <a href="{{ url_for('main.schedule') }}">Schedule</a>
-      <a href="{{ url_for('events.eventcreate') }}">Create</a>
-      <a href="{{ url_for('events.eventlist') }}">My Events</a>
-      <a href="{{ url_for('main.profile') }}">Profile</a>
-      <a href="{{ url_for('main.settings') }}">Settings</a>
-      <a class="btn-small" href="{{ url_for('main.logout') }}">Logout</a>
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('events.eventcreate') }}">Create</a>
+        <a href="{{ url_for('events.eventlist') }}">My Events</a>
+        <a href="{{ url_for('main.profile') }}">Profile</a>
+        <a href="{{ url_for('main.settings') }}">Settings</a>
+        <a class="btn-small" href="{{ url_for('main.logout') }}">Logout</a>
+      {% else %}
+        <a class="btn-small" href="{{ url_for('main.login') }}">Log in</a>
+      {% endif %}
     </nav>
   </header>
 
@@ -30,8 +34,8 @@
       <p>Pick where you want to go.</p>
       <div class="actions">
         <a class="btn" href="{{ url_for('main.schedule') }}">View Schedule</a>
-        <a class="btn-outline" href="{{ url_for('events.eventcreate') }}">Create Event</a>
-        <a class="btn-outline" href="{{ url_for('events.eventlist') }}">View Events</a>
+        <a class="btn" href="{{ url_for('events.eventcreate') }}">Create Event</a>
+        <a class="btn" href="{{ url_for('events.eventlist') }}">View Events</a>
       </div>
     </section>
 

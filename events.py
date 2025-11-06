@@ -14,30 +14,46 @@ def eventcreate():
 @login_required
 def create_event():
     # Collect form data
-    clas_type = request.form['clas_type']
-    format = request.form['format']
-    department = request.form['department']
-    course_number = request.form['course_number']
-    course_title = request.form['course_title']
-    num_entries = request.form.get('num_entries', type=int)
-    num_students = request.form.get('num_students', type=int)
-    session_title = request.form['session_title']
-    session_length = request.form['session_length']
-    individual_entry_length = request.form['individual_entry_length']
-    room_request = request.form.get('room_request', '')
-    special_request = request.form.get('special_request', '')
+    clas_type = request.form.get('clas_type', '').strip()
+    format = request.form.get('format', '').strip()
+    department = request.form.get('department', '').strip()
+    course_number = request.form.get('course_number', '').strip()
+    course_title = request.form.get('course_title', '').strip()
+    session_title = request.form.get('session_title', '').strip()
+    room_request = request.form.get('room_request', '').strip()
+    special_request = request.form.get('special_request', '').strip()
 
     action = request.form.get('action')
     status = 'submitted' if action == 'submit' else 'draft'
 
+    # Handle numeric fields
+    try:
+        num_entries = int(request.form.get('num_entries')) if request.form.get('num_entries') else None
+        num_students = int(request.form.get('num_students')) if request.form.get('num_students') else None
+        session_length = int(request.form.get('session_length')) if request.form.get('session_length') else None
+        individual_entry_length = int(request.form.get('individual_entry_length')) if request.form.get('individual_entry_length') else None
+    except ValueError:
+        flash("Numeric fields must be valid numbers.", "error")
+        return redirect(url_for('events.eventcreate'))
+
+    # Validate required fields for submitted events
     if status == 'submitted':
         required_fields = [
             clas_type, format, department, course_number, course_title,
-            session_title, session_length, individual_entry_length
+            session_title, num_entries, num_students, session_length, individual_entry_length
         ]
         if any(f is None or f == '' for f in required_fields):
-                flash("All fields must be filled to submit the event. Please double check you have filled out all the required fields. Or, you can save this as a draft and come back to it later.")
-                return redirect(url_for('events.eventcreate'))
+            flash(
+                "All fields must be filled to submit the event. "
+                "Please double-check all required fields, or save as a draft."
+            )
+            return redirect(url_for('events.eventcreate'))
+        
+    # Assign a temporary name if session_title is blank (for drafts)
+    if not session_title:
+        # Count existing drafts for the current user
+        existing_drafts = Event.query.filter_by(user_id=current_user.id, status='draft').count()
+        session_title = f"New Event {existing_drafts + 1}"
 
     # Create and save event
     new_event = Event(
@@ -47,22 +63,20 @@ def create_event():
         department=department,
         course_number=course_number,
         course_title=course_title,
-        num_entries=num_entries,
-        num_students=num_students,
+        num_entries=num_entries if num_entries is not None else 0,
+        num_students=num_students if num_students is not None else 0,
         session_title=session_title,
-        session_length=session_length,
-        individual_entry_length=individual_entry_length,
+        session_length=session_length if session_length is not None else 0,
+        individual_entry_length=individual_entry_length if individual_entry_length is not None else 0,
         room_request=room_request,
         special_request=special_request,
         status=status
     )
     db.session.add(new_event)
     db.session.commit()
-    if status == 'draft':
-        flash(f'Draft "{session_title}" saved successfully!')
-    else:
-        flash(f'Event "{session_title}" submitted successfully!')
-    return redirect(url_for('events.eventlist'))  # Redirect to list after creating
+
+    flash(f'{"Draft" if status=="draft" else "Event"} "{session_title}" saved successfully!')
+    return redirect(url_for('events.eventlist'))
 
 @events_blueprint.route('/eventlist', methods=['GET'])
 @login_required
@@ -73,6 +87,7 @@ def eventlist():
 @events_blueprint.route('/event/submit/<int:event_id>', methods=['POST'])
 @login_required
 def submit_event(event_id):
+    print("Submitting event:", event_id)
     event = Event.query.get_or_404(event_id)
     
     # Check if session already exists for this event
@@ -90,6 +105,23 @@ def submit_event(event_id):
         return render_template('eventedit.html', user=current_user, event=event)
 
     event.status = 'submitted'
+    db.session.commit()
+
+    # Create a new session for this event
+    from datetime import datetime, timedelta
+    
+    # Example: default start_time as now, end_time based on session_length (assuming minutes)
+    start_time = datetime.now().time()
+    end_time_dt = (datetime.combine(datetime.today(), start_time) + timedelta(minutes=event.session_length)).time()
+    
+    new_session = Session(
+        user_id=current_user.id,
+        submission_id=event.id,
+        room_id=event.room_id if hasattr(event, 'room_id') else 1,  # fallback room
+        start_time=start_time,
+        end_time=end_time_dt
+    )
+    db.session.add(new_session)
     db.session.commit()
     
     flash(f'Event "{event.session_title}" submitted successfully!')

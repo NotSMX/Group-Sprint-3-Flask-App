@@ -10,21 +10,49 @@
     <div class="brand">CLAS</div>
     <nav class="nav">
       <a href="{{ url_for('main.home') }}">Home</a>
-      <a class="active" href="{{ url_for('main.schedule') }}">Schedule</a>
-      <a href="{{ url_for('events.eventcreate') }}">Create</a>
-      <a href="{{ url_for('events.eventlist') }}">My Events</a>
-      <a href="{{ url_for('main.profile') }}">Profile</a>
-      <a href="{{ url_for('main.settings') }}">Settings</a>
-      <a class="btn-small" href="{{ url_for('main.logout') }}">Logout</a>
+      <a href="{{ url_for('main.schedule') }}">Schedule</a>
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('events.eventcreate') }}">Create</a>
+        <a href="{{ url_for('events.eventlist') }}">My Events</a>
+        <a href="{{ url_for('main.profile') }}">Profile</a>
+        <a href="{{ url_for('main.settings') }}">Settings</a>
+        <a class="btn-small" href="{{ url_for('main.logout') }}">Logout</a>
+      {% else %}
+        <a class="btn-small" href="{{ url_for('main.login') }}">Log in</a>
+      {% endif %}
     </nav>
   </header>
 
-  <main class="shell">
-    <h2 class="section-title">CLAS Schedule</h2>
-    <div class="card">
-      <b>Sample Session</b><br>
-      10:00 → 10:30 · Lovejoy 100
+<main class="shell">
+  <h2 class="section-title">CLAS Schedule</h2>
+  <h3 class="section-subtitle">View all scheduled sessions below (WIP)</h3>
+  <div class="schedule-container">
+    <!-- Timeline header -->
+    <div class="timeline">
+      {% for hour in range(24) %}
+        <div class="timeline-hour" 
+             data-position="{{ (hour/24 * 100) }}"
+             style="--pos: {{ (hour/24 * 100) }}%">
+          {{ "%02d:00"|format(hour) }}
+        </div>
+      {% endfor %}
     </div>
-  </main>
+
+    <!-- Session bars -->
+    {% for s in sessions %}
+      <div class="session-bar"
+           data-start="{{ (s.start_minutes/1440 * 100) }}"
+           data-width="{{ ((s.end_minutes - s.start_minutes)/1440 * 100) }}"
+           data-top="{{ (s.lane * 50) + 50 }}"
+           style="--start: {{ (s.start_minutes/1440 * 100) }}%;
+                  --width: {{ ((s.end_minutes - s.start_minutes)/1440 * 100) }}%;
+                  --top: {{ (s.lane * 50) + 50 }}px">
+        {{ s.title }}<br>
+        {{ s.start_minutes//60 }}:{{ "%02d"|format(s.start_minutes%60) }} →
+        {{ s.end_minutes//60 }}:{{ "%02d"|format(s.end_minutes%60) }}
+      </div>
+    {% endfor %}
+  </div>
+</main>
 </body>
 </html>
