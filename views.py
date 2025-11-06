@@ -56,9 +56,11 @@ def register():
     return render_template("register.html")
 
 @main_blueprint.get("/schedule")
-@login_required
 def schedule():
-    return render_template("schedule.html", user=current_user)
+    return render_template(
+        "schedule.html",
+        user=current_user if current_user.is_authenticated else None
+    )
 
 # Profile
 @main_blueprint.get("/profile")
