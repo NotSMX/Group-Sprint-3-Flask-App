@@ -26,13 +26,22 @@
         {% for event in events %}
             <li>
             {{ event.session_title }}
-            {% if event.session %}
+            {% if event.status == "submitted" %}
                 <span style="color: green; font-weight: bold;">Submitted</span>
             {% else %}
-                <form action="{{ url_for('events.submit_event', event_id=event.id) }}" method="post" style="display:inline;">
+            <span style="color: yellow; font-weight: bold;">Draft</span>
+                <form action="{{ url_for('events.submit_event', event_id=event.id) }}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to submit this event?');">
                 <button type="submit">Submit</button>
                 </form>
             {% endif %}
+
+            <form action="{{ url_for('events.edit_event', event_id=event.id) }}" method="get" style="display:inline;">
+                <button type="submit">Edit</button>
+            </form>
+
+            <form action="{{ url_for('events.delete_event', event_id=event.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this event?');">
+                <button type="submit">Delete</button>
+            </form>
             </li>
         {% endfor %}
         </ul>

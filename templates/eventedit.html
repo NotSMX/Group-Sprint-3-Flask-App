@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Event</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="event-create-container">
+    <h2>Edit Event Details</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+          <div class="flash-messages">
+          {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
+          </div>
+      {% endif %}
+    {% endwith %}
+    <form action="{{ url_for('events.edit_event', event_id=event.id) }}" method="post">
+      <input type="hidden" name="user_id" value="{{ current_user.id }}">
+      
+      <label for="clas_type">CLAS Type</label>
+      <select name="clas_type">
+        <option value="Thursday CLAS" {% if event.clas_type == 'Thursday CLAS' %}selected{% endif %}>Thursday CLAS</option>
+        <option value="Open CLAS" {% if event.clas_type == 'Open CLAS' %}selected{% endif %}>Open CLAS</option>
+      </select>
+      
+      <label for="format">Format</label>
+      <select name="format">
+        <option value="Poster" {% if event.format == 'Poster' %}selected{% endif %}>Poster</option>
+        <option value="Presentation" {% if event.format == 'Presentation' %}selected{% endif %}>Presentation</option>
+        <option value="Wildcard" {% if event.format == 'Wildcard' %}selected{% endif %}>Wildcard</option>
+      </select>
+      
+      <label for="department">Department</label>
+      <input type="text" name="department" placeholder="Department" value="{{ event.department }}">
+      
+      <label for="course_number">Course Number</label>
+      <input type="text" name="course_number" placeholder="Course Number" value="{{ event.course_number }}">
+      
+      <label for="course_title">Course Title</label>
+      <input type="text" name="course_title" placeholder="Course Title" value="{{ event.course_title }}">
+      
+      <label for="num_entries">Number of Entries</label>
+      <input type="number" name="num_entries" placeholder="Number of Entries" value="{{ event.num_entries }}">
+      
+      <label for="num_students">Number of Students</label>
+      <input type="number" name="num_students" placeholder="Number of Students" value="{{ event.num_students }}">
+      
+      <label for="session_title">Session Title</label>
+      <input type="text" name="session_title" placeholder="Session Title" value="{{ event.session_title }}">
+      
+      <label for="session_length">Session Length (in minutes)</label>
+      <input type="number" name="session_length" placeholder="Session Length" value="{{ event.session_length }}">
+      
+      <label for="individual_entry_length">Individual Entry Length (in minutes)</label>
+      <input type="number" name="individual_entry_length" placeholder="Individual Entry Length" value="{{ event.individual_entry_length }}">
+      
+      <label for="room_request">Room Request</label>
+      <input type="text" name="room_request" placeholder="Room Request" value="{{ event.room_request or '' }}">
+      
+      <label for="special_request">Special Requests</label>
+      <input type="text" name="special_request" placeholder="Special Requests" value="{{ event.special_request or '' }}">
+      
+      {% if event.status == 'draft' %}
+        <button type="submit" name="action" value="draft">Save Draft</button>
+        <button type="submit" name="action" value="submit">Submit Event</button>
+      {% else %}
+        <button type="submit" name="action" value="submit">Update Event</button>
+      {% endif %}
+    </form>
+  </div>
+</body>
+</html>
