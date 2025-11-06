@@ -10,7 +10,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     role = db.Column(db.String(20), nullable=False, default="student")  # <-- add this line
-    submissions = db.relationship('Submission', backref='user')
+    events = db.relationship('Event', backref='user')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -18,7 +18,7 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-class Submission(db.Model):
+class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     clas_type = db.Column(db.String(80), nullable=False)
@@ -34,12 +34,12 @@ class Submission(db.Model):
     room_request = db.Column(db.String(160))
     special_request = db.Column(db.String(160))
 
-    session = db.relationship('Session', backref='submission', uselist=False)
+    session = db.relationship('Session', backref='Event', uselist=False)
 
 class Session(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    submission_id = db.Column(db.Integer, db.ForeignKey('submission.id'), nullable=False, unique=True)
+    submission_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False, unique=True)
     room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=False)
     start_time = db.Column(db.Time)
     end_time = db.Column(db.Time)

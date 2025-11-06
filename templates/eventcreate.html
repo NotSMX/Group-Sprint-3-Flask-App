@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Submit Event</title>
+  <title>Create Event</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <div class="event-submit-container">
-    <h2>Submit Event Details</h2>
-    <form action="/submit_event" method="post">
+  <div class="event-create-container">
+    <h2>Create Event Details</h2>
+    <form action="/eventcreate" method="post">
       <input type="hidden" name="user_id" value="{{ current_user.id }}">
       
       <label for="clas_type">CLAS Type</label>
@@ -54,7 +54,7 @@
       <label for="special_request">Special Requests</label>
       <input type="text" name="special_request" placeholder="Special Requests">
       
-      <button type="submit">Submit</button>
+      <button type="submit">Create</button>
     </form>
   </div>
 </body>
