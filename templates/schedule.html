@@ -1,15 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Schedule | CLAS</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
-  <div class="container">
-    <h2>CLAS Schedule</h2>
-    <p>placeholder for now - hook this up to CLAS data later.</p>
-    <div class="card"><b>Sample Session</b><br>10:00 → 10:30 · Lovejoy 100</div>
-  </div>
+  <header class="topbar">
+    <div class="brand">CLAS</div>
+    <nav class="nav">
+      <a href="{{ url_for('main.home') }}">Home</a>
+      <a class="active" href="{{ url_for('main.schedule') }}">Schedule</a>
+      <a href="{{ url_for('events.eventcreate') }}">Create</a>
+      <a href="{{ url_for('events.eventlist') }}">My Events</a>
+      <a href="{{ url_for('main.profile') }}">Profile</a>
+      <a href="{{ url_for('main.settings') }}">Settings</a>
+      <a class="btn-small" href="{{ url_for('main.logout') }}">Logout</a>
+    </nav>
+  </header>
+
+  <main class="shell">
+    <h2 class="section-title">CLAS Schedule</h2>
+    <div class="card">
+      <b>Sample Session</b><br>
+      10:00 → 10:30 · Lovejoy 100
+    </div>
+  </main>
 </body>
 </html>
