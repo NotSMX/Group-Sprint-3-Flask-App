@@ -65,8 +65,3 @@ def logout():
     logout_user()
     flash("You’ve been logged out.", "info")
     return redirect(url_for("main.login"))
-
-@main_blueprint.route('/submission')
-@login_required
-def submission():
-    return render_template('submission.html')

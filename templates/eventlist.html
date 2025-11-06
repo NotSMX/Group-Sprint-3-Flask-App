@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Events</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="event-list-container">
+        <h2>Your Events</h2>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+        
+        <a href="{{ url_for('events.eventcreate') }}" class="btn">Create New Event</a>
+
+        {% if events %}
+        <ul>
+        {% for event in events %}
+            <li>
+            {{ event.session_title }}
+            {% if event.session %}
+                <span style="color: green; font-weight: bold;">Submitted</span>
+            {% else %}
+                <form action="{{ url_for('events.submit_event', event_id=event.id) }}" method="post" style="display:inline;">
+                <button type="submit">Submit</button>
+                </form>
+            {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+        {% else %}
+        <p>You have not created any events.</p>
+        {% endif %}
+
+  </div>
+</body>
+</html>
