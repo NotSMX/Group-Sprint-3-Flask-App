@@ -64,10 +64,11 @@
       <input type="text" name="special_request" placeholder="Special Requests" value="{{ event.special_request or '' }}">
       
       {% if event.status == 'draft' %}
-        <button type="submit" name="action" value="draft">Save Draft</button>
-        <button type="submit" name="action" value="submit">Submit Event</button>
+        <button class="btn" type="submit" name="action" value="draft">Save Draft</button>
+        <button class="btn-outline" type="submit" name="action" value="submit">Submit Event</button>
+
       {% else %}
-        <button type="submit" name="action" value="submit">Update Event</button>
+        <button class="btn" type="submit" name="action" value="submit">Update Event</button>
       {% endif %}
     </form>
   </div>
