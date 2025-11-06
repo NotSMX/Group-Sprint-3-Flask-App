@@ -1,18 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Home | CLAS App</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8" />
+  <title>CLAS — Welcome</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
-  <div class="home-container">
-    <h1>Welcome to Our CLAS App </h1>
-    <p>PLACEHOLDER</p>
+  <!-- Top Navigation -->
+  <header class="topbar">
+    <div class="brand">CLAS</div>
+    <nav class="nav">
+      <a href="{{ url_for('main.home') }}">Home</a>
+      <a href="{{ url_for('main.schedule') }}">Schedule</a>
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('events.eventcreate') }}">Create</a>
+        <a href="{{ url_for('events.eventlist') }}">My Events</a>
+        <a href="{{ url_for('main.profile') }}">Profile</a>
+        <a href="{{ url_for('main.settings') }}">Settings</a>
+        <a class="btn-small" href="{{ url_for('main.logout') }}">Logout</a>
+      {% else %}
+        <a class="btn-small" href="{{ url_for('main.login') }}">Log in</a>
+      {% endif %}
+    </nav>
+  </header>
 
-    <div class="button-group">
-      <a href="{{ url_for('main.login') }}" class="btn">Log In</a>
-    </div>
+  <!-- Announcement bar -->
+  <div class="announcement">
+    Submission Deadline for CLAS Spring: Feb 12, 5pm
+    <button class="badge">View Details</button>
   </div>
+
+  <!-- Hero. I made this for phone compatibility -->
+  <main class="shell">
+    <section class="hero">
+      <h1>CLAS SCHEDULING</h1>
+      <p>Find sessions, schedule a presentation, stay updated!</p>
+      <a href="{{ url_for('main.schedule') }}" class="btn">View Schedule</a>
+    </section>
+
+    <section class="quick-grid">
+      <div class="quick-card">
+        <h3>View Full Schedule</h3>
+        <p>All scheduled CLAS events and sessions</p>
+        <a class="link" href="{{ url_for('main.schedule') }}">Open</a>
+      </div>
+      <div class="quick-card">
+        <h3>Search Schedule</h3>
+        <p>Search the full schedule of events</p>
+        <a class="link" href="{{ url_for('main.schedule') }}">Search</a>
+      </div>
+      <div class="quick-card">
+        <h3>Notifications</h3>
+        <p>Confirmations and reminders</p>
+        {% if current_user.is_authenticated %}
+        <a class="link" href="{{ url_for('events.eventlist') }}">View</a>
+        {% else %}
+        <a class="link" href="{{ url_for('main.login') }}">Sign in</a>
+        {% endif %}
+      </div>
+    </section>
+  </main>
 </body>
 </html>
