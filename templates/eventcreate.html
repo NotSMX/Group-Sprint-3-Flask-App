@@ -6,71 +6,66 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">CLAS</div>
-    <nav class="nav">
-      <a href="{{ url_for('main.home') }}">Home</a>
-      <a href="{{ url_for('main.schedule') }}">Schedule</a>
-      <a class="active" href="{{ url_for('events.eventcreate') }}">Create</a>
-      <a href="{{ url_for('events.eventlist') }}">My Events</a>
-      <a href="{{ url_for('main.profile') }}">Profile</a>
-      <a href="{{ url_for('main.settings') }}">Settings</a>
-      <a class="btn-small" href="{{ url_for('main.logout') }}">Logout</a>
-    </nav>
-  </header>
-
-  <main class="shell">
-    <h2 class="section-title">Create Event Details</h2>
-    <div class="card form-card event-create-container">
-      <form action="/eventcreate" method="post">
-        <input type="hidden" name="user_id" value="{{ current_user.id }}" />
-
-        <label>CLAS Type</label>
-        <select name="clas_type" required>
-          <option value="Thursday CLAS">Thursday CLAS</option>
-          <option value="Open CLAS">Open CLAS</option>
-        </select>
-
-        <label>Format</label>
-        <select name="format" required>
-          <option value="Poster">Poster</option>
-          <option value="Presentation">Presentation</option>
-          <option value="Wildcard">Wildcard</option>
-        </select>
-
-        <label>Department</label>
-        <input type="text" name="department" placeholder="Department" required />
-
-        <label>Course Number</label>
-        <input type="text" name="course_number" placeholder="Course Number" required />
-
-        <label>Course Title</label>
-        <input type="text" name="course_title" placeholder="Course Title" required />
-
-        <label>Number of Entries</label>
-        <input type="number" name="num_entries" placeholder="Number of Entries" />
-
-        <label>Number of Students</label>
-        <input type="number" name="num_students" placeholder="Number of Students" />
-
-        <label>Session Title</label>
-        <input type="text" name="session_title" placeholder="Session Title" required />
-
-        <label>Session Length (minutes)</label>
-        <input type="number" name="session_length" placeholder="Session Length" required />
-
-        <label>Individual Entry Length (minutes)</label>
-        <input type="number" name="individual_entry_length" placeholder="Entry Length" required />
-
-        <label>Room Request</label>
-        <input type="text" name="room_request" placeholder="Room Request" />
-
-        <label>Special Requests</label>
-        <input type="text" name="special_request" placeholder="Special Requests" />
-
-        <button type="submit">Create</button>
-      </form>
-    </div>
-  </main>
+  <div class="event-create-container">
+    <h2>Create Event Details</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+          <div class="flash-messages">
+          {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
+          </div>
+      {% endif %}
+    {% endwith %}
+    <form action="/eventcreate" method="post">
+      <input type="hidden" name="user_id" value="{{ current_user.id }}">
+      
+      <label for="clas_type">CLAS Type</label>
+      <select name="clas_type">
+        <option value="Thursday CLAS">Thursday CLAS</option>
+        <option value="Open CLAS">Open CLAS</option>
+      </select>
+      
+      <label for="format">Format</label>
+      <select name="format">
+        <option value="Poster">Poster</option>
+        <option value="Presentation">Presentation</option>
+        <option value="Wildcard">Wildcard</option>
+      </select>
+      
+      <label for="department">Department</label>
+      <input type="text" name="department" placeholder="Department">
+      
+      <label for="course_number">Course Number</label>
+      <input type="text" name="course_number" placeholder="Course Number">
+      
+      <label for="course_title">Course Title</label>
+      <input type="text" name="course_title" placeholder="Course Title">
+      
+      <label for="num_entries">Number of Entries</label>
+      <input type="number" name="num_entries" placeholder="Number of Entries">
+      
+      <label for="num_students">Number of Students</label>
+      <input type="number" name="num_students" placeholder="Number of Students">
+      
+      <label for="session_title">Session Title</label>
+      <input type="text" name="session_title" placeholder="Session Title">
+      
+      <label for="session_length">Session Length (in minutes)</label>
+      <input type="number" name="session_length" placeholder="Session Length">
+      
+      <label for="individual_entry_length">Individual Entry Length (in minutes)</label>
+      <input type="number" name="individual_entry_length" placeholder="Individual Entry Length">
+      
+      <label for="room_request">Room Request</label>
+      <input type="text" name="room_request" placeholder="Room Request">
+      
+      <label for="special_request">Special Requests</label>
+      <input type="text" name="special_request" placeholder="Special Requests">
+      
+      <button type="submit" name="action" value="draft">Save Draft</button>
+      <button type="submit" name="action" value="submit">Submit Event</button>
+    </form>
+  </div>
 </body>
 </html>
