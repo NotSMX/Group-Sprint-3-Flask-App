@@ -87,6 +87,7 @@ def eventlist():
 @events_blueprint.route('/event/submit/<int:event_id>', methods=['POST'])
 @login_required
 def submit_event(event_id):
+    print("Submitting event:", event_id)
     event = Event.query.get_or_404(event_id)
     
     # Check if session already exists for this event
@@ -104,6 +105,23 @@ def submit_event(event_id):
         return render_template('eventedit.html', user=current_user, event=event)
 
     event.status = 'submitted'
+    db.session.commit()
+
+    # Create a new session for this event
+    from datetime import datetime, timedelta
+    
+    # Example: default start_time as now, end_time based on session_length (assuming minutes)
+    start_time = datetime.now().time()
+    end_time_dt = (datetime.combine(datetime.today(), start_time) + timedelta(minutes=event.session_length)).time()
+    
+    new_session = Session(
+        user_id=current_user.id,
+        submission_id=event.id,
+        room_id=event.room_id if hasattr(event, 'room_id') else 1,  # fallback room
+        start_time=start_time,
+        end_time=end_time_dt
+    )
+    db.session.add(new_session)
     db.session.commit()
     
     flash(f'Event "{event.session_title}" submitted successfully!')
