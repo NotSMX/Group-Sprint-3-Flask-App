@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, flash, redirect, url_for, request
+from flask import Blueprint, request, render_template, flash, redirect, url_for
 from flask_login import login_required, current_user
 from models import db, Event, Session
 from datetime import time
@@ -27,7 +27,6 @@ def create_event():
     room_request = request.form.get('room_request', '')
     special_request = request.form.get('special_request', '')
 
-    # Create and save event
     new_event = Event(
         user_id=current_user.id,
         clas_type=clas_type,
@@ -43,10 +42,9 @@ def create_event():
         room_request=room_request,
         special_request=special_request
     )
-
     db.session.add(new_event)
     db.session.commit()
-    return redirect(url_for('events.eventlist'))  # Redirect to list after creating
+    return redirect(url_for('events.eventlist'))
 
 @events_blueprint.route('/eventlist', methods=['GET'])
 @login_required
@@ -58,24 +56,21 @@ def eventlist():
 @login_required
 def submit_event(event_id):
     event = Event.query.get_or_404(event_id)
-    
-    # Check if session already exists for this event
+
     existing_session = Session.query.filter_by(submission_id=event.id).first()
     if existing_session:
-        flash(f'Event "{event.session_title}" has already been submitted.')
+        flash(f'Event "{event.session_title}" has already been submitted.', 'info')
         return redirect(url_for('events.eventlist'))
-    
-    # Create new session with placeholder values
+
     new_session = Session(
         user_id=current_user.id,
         submission_id=event.id,
-        room_id=1,  # placeholder room ID
-        start_time=time(0, 0),  # placeholder start_time
-        end_time=time(1, 0)     # placeholder end_time
+        room_id=1,
+        start_time=time(0, 0),
+        end_time=time(1, 0)
     )
-    
     db.session.add(new_session)
     db.session.commit()
-    
-    flash(f'Event "{event.session_title}" submitted successfully!')
+
+    flash(f'Event "{event.session_title}" submitted successfully!', 'success')
     return redirect(url_for('events.eventlist'))
