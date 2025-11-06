@@ -186,7 +186,6 @@ body {
 .btn {
   display: inline-block;
   padding: 12px 24px;
-  margin-bottom: 10px;
   border-radius: 6px;
   font-weight: 600;
   text-decoration: none;
@@ -407,7 +406,6 @@ input::placeholder {
 button {
   width: 100%;
   padding: 12px 16px;
-  margin-bottom: 10px;
   border: 0;
   border-radius: 6px;
   background: var(--blue-m);
@@ -591,46 +589,103 @@ footer a {
   }
 }
 
-.schedule-container {
-  position: relative;
-  width: 100%;
-  height: 400px;
-  margin: 20px 0;
-  border: 1px solid var(--border);
-  background: var(--card);
-  border-radius: 8px;
-  padding: 20px;
+/* Schedule Page Styles */
+
+.schedule-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px 40px;
 }
 
-.timeline {
-  position: relative;
-  width: 100%;
-  height: 30px;
-  border-bottom: 1px solid var(--hair);
+.schedule-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 18px;
 }
 
-.timeline-hour {
-  position: absolute;
-  left: var(--pos);
-  transform: translateX(-50%);
-  font-size: 0.8rem;
-  color: var(--ink-2);
+.schedule-title-block h1 {
+  margin: 0;
+  font-size: 26px;
 }
 
-.session-bar {
-  position: absolute;
-  left: var(--start);
-  width: var(--width);
-  top: var(--top);
-  background: var(--blue-m);
-  color: white;
-  padding: 8px;
-  border-radius: 4px;
-  font-size: 0.9rem;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+.schedule-title-block p {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 14px;
 }
 
+.schedule-actions .link,
+.schedule-actions .btn-outline {
+  margin-left: 8px;
+  font-size: 13px;
+  text-decoration: none;
+  color: #2563eb;
+}
 
+.schedule-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
 
+.filter-input,
+.filter-select {
+  padding: 7px 10px;
+  border-radius: 6px;
+  border: 1px solid #d0d7de;
+  font-size: 13px;
+}
+
+.schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+}
+
+.session-card {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 10px 12px;
+  box-shadow: 0 1px 3px rgba(15,23,42,.08);
+  border: 1px solid #e5e7eb;
+}
+
+.session-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  background: #dcfce7;
+  color: #166534;
+  margin-bottom: 4px;
+}
+
+.session-tag-closed {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.session-tag-family {
+  background: #e0f2fe;
+  color: #1d4ed8;
+}
+
+.session-title {
+  margin: 0 0 2px;
+  font-size: 15px;
+}
+
+.session-meta {
+  margin: 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.empty-state {
+  margin-top: 14px;
+  font-size: 13px;
+  color: #9ca3af;
+}
