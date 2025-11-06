@@ -1,45 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Your Events</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8" />
+  <title>Your Events | CLAS</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
-    <div class="event-list-container">
-        <h2>Your Events</h2>
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    <div class="flash-messages">
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">{{ message }}</div>
-                    {% endfor %}
-                    </div>
-                {% endif %}
-        {% endwith %}
-        {% block content %}{% endblock %}
-        
-        <a href="{{ url_for('events.eventcreate') }}" class="btn">Create New Event</a>
+  <header class="topbar">
+    <div class="brand">CLAS</div>
+    <nav class="nav">
+      <a href="{{ url_for('main.home') }}">Home</a>
+      <a href="{{ url_for('main.schedule') }}">Schedule</a>
+      <a href="{{ url_for('events.eventcreate') }}">Create</a>
+      <a class="active" href="{{ url_for('events.eventlist') }}">My Events</a>
+      <a href="{{ url_for('main.profile') }}">Profile</a>
+      <a href="{{ url_for('main.settings') }}">Settings</a>
+      <a class="btn-small" href="{{ url_for('main.logout') }}">Logout</a>
+    </nav>
+  </header>
 
-        {% if events %}
-        <ul>
-        {% for event in events %}
-            <li>
-            {{ event.session_title }}
-            {% if event.session %}
-                <span style="color: green; font-weight: bold;">Submitted</span>
-            {% else %}
-                <form action="{{ url_for('events.submit_event', event_id=event.id) }}" method="post" style="display:inline;">
-                <button type="submit">Submit</button>
+  <main class="shell">
+    <h2 class="section-title">Your Events</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="card event-list-container">
+      <a href="{{ url_for('events.eventcreate') }}" class="btn" style="margin-bottom:16px">Create New Event</a>
+
+      {% if events %}
+        <ul class="event-list">
+          {% for event in events %}
+            <li class="event-row">
+              <span class="event-title">{{ event.session_title }}</span>
+              {% if event.session %}
+                <span class="pill pill-open">Submitted</span>
+              {% else %}
+                <form action="{{ url_for('events.submit_event', event_id=event.id) }}" method="post">
+                  <button class="submit-btn" type="submit">Submit</button>
                 </form>
-            {% endif %}
+              {% endif %}
             </li>
-        {% endfor %}
+          {% endfor %}
         </ul>
-        {% else %}
+      {% else %}
         <p>You have not created any events.</p>
-        {% endif %}
-
-  </div>
+      {% endif %}
+    </div>
+  </main>
 </body>
 </html>
