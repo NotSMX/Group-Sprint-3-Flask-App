@@ -50,6 +50,11 @@ body {
   font-size: 1.25rem
 }
 
+.topbar a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
 .nav {
   display: flex;
   gap: 24px;
