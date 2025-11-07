@@ -6,6 +6,11 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body class="schedule-page">
+  {% extends "base.html" %}
+
+  {% block title %}CLAS Schedule{% endblock %}
+
+  {% block content %}
   <div class="schedule-wrapper">
     <header class="schedule-header">
       <div class="schedule-title-block">
@@ -119,5 +124,6 @@
     building.addEventListener("change", applyFilters)
     type.addEventListener("change", applyFilters)
   </script>
+  {% endblock %}
 </body>
 </html>
