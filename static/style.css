@@ -84,28 +84,20 @@ body {
 .announcement {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 4px 12px;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 24px;
   background: #fef7e0;
   color: #7c5e10;
   font-weight: 500;
   border-bottom: 1px solid #f5e5b8;
-  font-size: 1rem;
-  height: 28px;
-  width: 100%;
-  margin: 0 auto; 
-  border-left: none;
-  border-right: none;
-  border-radius: 0;
-  box-sizing: border-box;
+  font-size: .9rem;
 }
 
 .announcement-content {
   display: flex;
   align-items: center;
   gap: 6px;
-  white-space: nowrap;
 }
 
 .badge {
@@ -119,21 +111,14 @@ body {
 }
 
 .announcement button {
-  padding: 3px 8px;
-  border-radius: 4px;
+  padding: 6px 13px;
+  border-radius: 6px;
   background: #f5d547;
   color: #5c4500;
   border: none;
   font-weight: 600;
   cursor: pointer;
-  font-size: 0.7rem;
-  max-width: 500px;
-  white-space: nowrap;
-  height: 22px;
-  margin: 0; 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 0.85rem;
 }
 
 
