@@ -1,129 +1,164 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>CLAS Schedule</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body class="schedule-page">
-  {% extends "base.html" %}
+{% extends "base.html" %}
 
-  {% block title %}CLAS Schedule{% endblock %}
+{% block title %}CLAS Schedule{% endblock %}
 
-  {% block content %}
-  <div class="schedule-wrapper">
-    <header class="schedule-header">
-      <div class="schedule-title-block">
-        <h1>CLAS Schedule</h1>
-        <p>browse sessions by building, dept, or type.</p>
-      </div>
-      <div class="schedule-actions">
-        <a href="{{ url_for('main.landing') }}" class="link">Home</a>
-        {% if user %}
-          <a href="{{ url_for('main.home') }}" class="link">Dashboard</a>
-          <a href="{{ url_for('main.logout') }}" class="link">Logout</a>
-        {% else %}
-          <a href="{{ url_for('main.login') }}" class="btn-outline">Log In</a>
-        {% endif %}
-      </div>
-    </header>
+{% block content %}
+<div class="schedule-wrapper">
+  <header class="schedule-header">
+    <div class="schedule-title-block">
+      <h1>CLAS Schedule</h1>
+      <p>browse sessions by building, dept, or type.</p>
+    </div>
+    <div class="schedule-actions">
+      <a href="{{ url_for('main.landing') }}" class="link">Home</a>
+      {% if user %}
+        <a href="{{ url_for('main.home') }}" class="link">Dashboard</a>
+        <a href="{{ url_for('main.logout') }}" class="link">Logout</a>
+      {% else %}
+        <a href="{{ url_for('main.login') }}" class="btn-outline">Log In</a>
+      {% endif %}
+    </div>
+  </header>
 
-    <section class="schedule-filters">
-      <input id="q" class="filter-input" placeholder="Search by course, title, room..." />
+  <section class="schedule-filters">
+    <input id="q" class="filter-input" placeholder="Search by course, title, room..." />
 
-      <select id="dept" class="filter-select">
-        <option value="">All Departments</option>
-        <option value="CS">CS</option>
-        <option value="BIO">BIO</option>
-        <option value="MUS">MUS</option>
-      </select>
+    <select id="dept" class="filter-select">
+      <option value="">All Departments</option>
+      <option value="CS">CS</option>
+      <option value="BIO">BIO</option>
+      <option value="MUS">MUS</option>
+    </select>
 
-      <select id="building" class="filter-select">
-        <option value="">All Buildings</option>
-        <option value="Lovejoy">Lovejoy</option>
-        <option value="Diamond">Diamond</option>
-        <option value="Keyes">Keyes</option>
-      </select>
+    <select id="building" class="filter-select">
+      <option value="">All Buildings</option>
+      <option value="Lovejoy">Lovejoy</option>
+      <option value="Diamond">Diamond</option>
+      <option value="Keyes">Keyes</option>
+    </select>
 
-      <select id="type" class="filter-select">
-        <option value="">All Types</option>
-        <option value="Open">Open</option>
-        <option value="Closed">Closed</option>
-        <option value="Family Friendly">Family Friendly</option>
-      </select>
-    </section>
+    <select id="type" class="filter-select">
+      <option value="">All Types</option>
+      <option value="Open">Open</option>
+      <option value="Closed">Closed</option>
+      <option value="Family Friendly">Family Friendly</option>
+    </select>
+  </section>
 
-    <section id="sessions" class="schedule-grid">
-      {# placeholder data for now; swap to real sessions later #}
-      <div class="session-card"
-           data-dept="CS"
-           data-building="Lovejoy"
-           data-type="Open"
-           data-text="cs 321 software engineering showcase lovejoy 100 open">
-        <div class="session-tag">Open</div>
-        <h3 class="session-title">CS 321 Software Engineering Showcase</h3>
-        <p class="session-meta">CS · Lovejoy 100 · 10:00–11:30 AM</p>
-      </div>
+  <section id="sessions" class="schedule-grid">
+    <!-- sample data; wired for modal + filters -->
+    <div class="session-card"
+         data-dept="CS"
+         data-building="Lovejoy"
+         data-type="Open"
+         data-text="cs 321 software engineering showcase lovejoy 100 open"
+         data-title="CS 321 Software Engineering Showcase"
+         data-meta="CS · Lovejoy 100 · 10:00–11:30 AM"
+         data-description="Student project demos and presentations from CS 321.">
+      <div class="session-tag">Open</div>
+      <h3 class="session-title">CS 321 Software Engineering Showcase</h3>
+      <p class="session-meta">CS · Lovejoy 100 · 10:00–11:30 AM</p>
+    </div>
 
-      <div class="session-card"
-           data-dept="BIO"
-           data-building="Diamond"
-           data-type="Closed"
-           data-text="bio 142 poster session diamond 145 closed">
-        <div class="session-tag session-tag-closed">Closed</div>
-        <h3 class="session-title">BIO 142 Poster Session</h3>
-        <p class="session-meta">BIO · Diamond 145 · 1:00–2:30 PM</p>
-      </div>
+    <div class="session-card"
+         data-dept="BIO"
+         data-building="Diamond"
+         data-type="Closed"
+         data-text="bio 142 poster session diamond 145 closed"
+         data-title="BIO 142 Poster Session"
+         data-meta="BIO · Diamond 145 · 1:00–2:30 PM"
+         data-description="Poster presentations for BIO 142 research projects.">
+      <div class="session-tag session-tag-closed">Closed</div>
+      <h3 class="session-title">BIO 142 Poster Session</h3>
+      <p class="session-meta">BIO · Diamond 145 · 1:00–2:30 PM</p>
+    </div>
 
-      <div class="session-card"
-           data-dept="MUS"
-           data-building="Gordon"
-           data-type="Family Friendly"
-           data-text="music clas recital gordon 1 family friendly open">
-        <div class="session-tag session-tag-family">Family Friendly</div>
-        <h3 class="session-title">Music & CLAS Recital</h3>
-        <p class="session-meta">MUS · Gordon 1 · 3:00–4:00 PM</p>
-      </div>
-    </section>
+    <div class="session-card"
+         data-dept="MUS"
+         data-building="Gordon"
+         data-type="Family Friendly"
+         data-text="music clas recital gordon 1 family friendly open"
+         data-title="Music & CLAS Recital"
+         data-meta="MUS · Gordon 1 · 3:00–4:00 PM"
+         data-description="Recital featuring CLAS performances; open to families and guests.">
+      <div class="session-tag session-tag-family">Family Friendly</div>
+      <h3 class="session-title">Music & CLAS Recital</h3>
+      <p class="session-meta">MUS · Gordon 1 · 3:00–4:00 PM</p>
+    </div>
+  </section>
 
-    <p id="emptyState" class="empty-state" style="display:none;">no sessions match that.</p>
+  <p id="emptyState" class="empty-state" style="display:none;">no sessions match that.</p>
+</div>
+
+<!-- modal -->
+<div id="sessionModal" class="session-modal">
+  <div class="session-modal-content">
+    <button id="sessionModalClose" class="session-modal-close">×</button>
+    <div id="modalType" class="session-modal-tag"></div>
+    <h2 id="modalTitle"></h2>
+    <p id="modalMeta" class="session-modal-meta"></p>
+    <p id="modalDesc" class="session-modal-desc"></p>
   </div>
+</div>
 
-  <script>
-    const q = document.getElementById("q")
-    const dept = document.getElementById("dept")
-    const building = document.getElementById("building")
-    const type = document.getElementById("type")
-    const cards = Array.from(document.querySelectorAll(".session-card"))
-    const empty = document.getElementById("emptyState")
+<script>
+  const q = document.getElementById("q")
+  const dept = document.getElementById("dept")
+  const building = document.getElementById("building")
+  const type = document.getElementById("type")
+  const cards = Array.from(document.querySelectorAll(".session-card"))
+  const empty = document.getElementById("emptyState")
 
-    function applyFilters() {
-      const text = (q.value || "").toLowerCase().trim()
-      const d = dept.value
-      const b = building.value
-      const t = type.value
+  function applyFilters() {
+    const text = (q.value || "").toLowerCase().trim()
+    const d = dept.value
+    const b = building.value
+    const t = type.value
+    let visible = 0
 
-      let visible = 0
+    cards.forEach(card => {
+      const matchText = !text || card.dataset.text.includes(text)
+      const matchDept = !d || card.dataset.dept === d
+      const matchBuilding = !b || card.dataset.building === b
+      const matchType = !t || card.dataset.type === t
+      const show = matchText && matchDept && matchBuilding && matchType
+      card.style.display = show ? "block" : "none"
+      if (show) visible++
+    })
 
-      cards.forEach(card => {
-        const matchText = !text || card.dataset.text.includes(text)
-        const matchDept = !d || card.dataset.dept === d
-        const matchBuilding = !b || card.dataset.building === b
-        const matchType = !t || card.dataset.type === t
+    empty.style.display = visible ? "none" : "block"
+  }
 
-        const show = matchText && matchDept && matchBuilding && matchType
-        card.style.display = show ? "block" : "none"
-        if (show) visible++
-      })
+  q.addEventListener("input", applyFilters)
+  dept.addEventListener("change", applyFilters)
+  building.addEventListener("change", applyFilters)
+  type.addEventListener("change", applyFilters)
 
-      empty.style.display = visible ? "none" : "block"
+  const modal = document.getElementById("sessionModal")
+  const modalTitle = document.getElementById("modalTitle")
+  const modalMeta = document.getElementById("modalMeta")
+  const modalType = document.getElementById("modalType")
+  const modalDesc = document.getElementById("modalDesc")
+  const modalClose = document.getElementById("sessionModalClose")
+
+  cards.forEach(card => {
+    card.addEventListener("click", () => {
+      modalTitle.textContent = card.dataset.title || ""
+      modalMeta.textContent = card.dataset.meta || ""
+      modalType.textContent = card.dataset.type || ""
+      modalDesc.textContent = card.dataset.description || ""
+      modal.classList.add("show")
+    })
+  })
+
+  modalClose.addEventListener("click", () => {
+    modal.classList.remove("show")
+  })
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.classList.remove("show")
     }
-
-    q.addEventListener("input", applyFilters)
-    dept.addEventListener("change", applyFilters)
-    building.addEventListener("change", applyFilters)
-    type.addEventListener("change", applyFilters)
-  </script>
-  {% endblock %}
-</body>
-</html>
+  })
+</script>
+{% endblock %}
