@@ -729,3 +729,61 @@ footer a {
   font-size: 13px;
   color: #9ca3af;
 }
+
+.session-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.25);
+  z-index: 50;
+}
+
+.session-modal.show {
+  display: flex;
+}
+
+.session-modal-content {
+  background: #ffffff;
+  padding: 20px 22px 18px;
+  border-radius: 16px;
+  max-width: 480px;
+  width: 90%;
+  box-shadow: 0 10px 35px rgba(15,23,42,.18);
+  position: relative;
+  font-size: 0.95rem;
+}
+
+.session-modal-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  border: 0;
+  background: transparent;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.session-modal-tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  background: #e5f0ff;
+  color: #1d4ed8;
+  margin-bottom: 6px;
+}
+
+.session-modal-meta {
+  margin: 0 0 6px;
+  color: #6b7280;
+  font-size: 0.82rem;
+}
+
+.session-modal-desc {
+  margin: 0;
+  color: #111827;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
