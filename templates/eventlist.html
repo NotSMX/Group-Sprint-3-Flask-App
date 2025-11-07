@@ -7,7 +7,9 @@
 </head>
 <body>
     <header class="topbar">
-    <div class="brand">CLAS</div>
+    <div class="brand">
+      <a href="{{ url_for('main.home') }}">CLAS</a>
+    </div>
     <nav class="nav">
       <a href="{{ url_for('main.home') }}">Home</a>
       <a href="{{ url_for('main.schedule') }}">Schedule</a>
