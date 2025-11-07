@@ -417,7 +417,8 @@ button {
   color: #fff;
   font-weight: 600;
   cursor: pointer;
-  font-size: .95rem
+  font-size: .95rem;
+  margin-bottom: 12px;
 }
 
 button:hover {
