@@ -30,7 +30,7 @@
 
   <main class="shell">
     <section class="hero">
-      <h1>Welcome, {{ user.name or 'Student' }}!</h1>
+      <h1>Welcome, {{ user.name or 'Visitor' }}!</h1>
       <p>Pick where you want to go.</p>
       <div class="actions">
         <a class="btn" href="{{ url_for('main.schedule') }}">View Schedule</a>
